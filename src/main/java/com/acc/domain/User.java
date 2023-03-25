@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String email;
 
@@ -32,11 +32,11 @@ public class User {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
