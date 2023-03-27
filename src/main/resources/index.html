@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Web Crawling Example</title>
+  </head>
+  <body>
+    <h1>Web Crawling Example</h1>
+    <button id="button1">Sort By Priority</button>
+    <button id="button2">Filter</button>
+    <button id="button3">Notify Tasks</button>
+    <br><br>
+    <textarea id="list" rows="10" cols="50"></textarea>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+      const button1 = document.querySelector('#button1');
+      const button2 = document.querySelector('#button2');
+      const button3 = document.querySelector('#button3');
+      const list = document.querySelector('#list');
+      
+      const userId = 1;
+      
+      const headers = {
+			'userId': userId
+		};
+
+
+      const getList1 = async () => {
+          const response = axios.get('http://localhost:8080/tasks?sortBy=Priority', {
+				headers: headers
+			}).then(response => {
+				list.value = JSON.stringify(response.data, null, 2);
+			});
+      };
+      const getList2 = async () => {
+          const response = axios.get('http://localhost:8080/tasks?sortBy=Priority', {
+				headers: headers
+			}).then(response => {
+				list.value = JSON.stringify(response.data, null, 2);
+			});
+      };
+      const getList3 = async () => {
+          const response = axios.get('http://localhost:8080/tasks/notify', {
+				headers: headers
+			}).then(response => {
+				list.value = JSON.stringify(response.data, null, 2);
+			});
+      };
+
+      button1.addEventListener('click', getList1);
+      button2.addEventListener('click', getList2);
+      button3.addEventListener('click', getList3);
+    </script>
+  </body>
+</html>
