@@ -21,5 +21,7 @@ public interface TaskService {
 	List<Task> getFilteredTasks(Integer userId, String CategoryKey) throws TasksNotFoundException, UserNotFoundException;
 
 	public List<Task> getNotifiedTasks(Integer userId) throws UserNotFoundException, TasksNotFoundException;
+
+	public void deleteTask(Integer taskId, Integer userId);
 }
 
