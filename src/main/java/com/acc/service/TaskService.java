@@ -12,5 +12,7 @@ public interface TaskService {
 
 	public Task updateTask(Integer taskId, TaskDTO taskDTO) throws ResourceNotFoundException;
 
-	public List<Task> getAllTasks();
+	public List<Task> getAllTasks(String sortBy);
+
+	public List<Task> getTasks(String searchKey);
 }

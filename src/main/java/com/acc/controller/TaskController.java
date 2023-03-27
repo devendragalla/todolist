@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acc.domain.Task;
@@ -44,7 +45,12 @@ public class TaskController {
 	}
 
 	@GetMapping()
-	public List<Task> getAllTasks() {
-		return taskService.getAllTasks();
+	public List<Task> getAllTasks(@RequestParam(name = "sortBy") String sortBy) {
+		return taskService.getAllTasks(sortBy);
+	}
+	
+	@GetMapping("/search")
+	public List<Task> getTasks(@RequestParam(name = "searchKey") String searchKey) {
+		return taskService.getTasks(searchKey);
 	}
 }

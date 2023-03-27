@@ -14,6 +14,7 @@ import com.acc.domain.Status;
 import com.acc.domain.Task;
 import com.acc.exception.ResourceNotFoundException;
 import com.acc.model.TaskDTO;
+import com.acc.service.SortingService;
 import com.acc.service.TaskService;
 
 @Service
@@ -30,6 +31,12 @@ public class TaskServiceImpl  implements TaskService{
 
     @Autowired
     private StatusRepository statusRepository;
+    
+    @Autowired
+    private SortingService sortingService;
+    
+    @Autowired
+    private SearchingServiceImpl searchingService;
 
     @Override
     public Task save(TaskDTO taskDTO) {
@@ -84,9 +91,17 @@ public class TaskServiceImpl  implements TaskService{
         Task updatedTask = taskRepository.save(task);
         return updatedTask;
     }
-    
-    @Override
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
+
+	@Override
+	public List<Task> getAllTasks(String sortBy) {
+		List<Task> tasks = taskRepository.findAll();
+		List<Task> sortedTasks =sortingService.sort(tasks, sortBy);
+		return sortedTasks;
+	}
+
+	@Override
+	public List<Task> getTasks(String searchKey) {
+		List<Task> tasks = taskRepository.findAll();
+		return searchingService.search(tasks, searchKey);
+	}
 }
