@@ -3,6 +3,7 @@ package com.acc.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import com.acc.service.TaskService;
 
 @RestController
 @RequestMapping("/tasks")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class TaskController {
 
 	@Autowired
@@ -47,7 +49,8 @@ public class TaskController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<?> getAllTasks(@RequestHeader("userId") Integer userId, @RequestParam(name = "sortBy") String sortBy) throws UserNotFoundException {
+	public ResponseEntity<?> getAllTasks(@RequestHeader("userId") Integer userId,
+			@RequestParam(name = "sortBy") String sortBy) throws UserNotFoundException {
 		try {
 			return ResponseEntity.ok(taskService.getAllTasks(userId, sortBy));
 		} catch (UserNotFoundException e) {
@@ -56,9 +59,10 @@ public class TaskController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
 		}
 	}
-	
+
 	@GetMapping("/search")
-	public ResponseEntity<?> getTasks(@RequestHeader("userId") Integer userId, @RequestParam(name = "searchKey") String searchKey) {
+	public ResponseEntity<?> getTasks(@RequestHeader("userId") Integer userId,
+			@RequestParam(name = "searchKey") String searchKey) {
 		try {
 			return ResponseEntity.ok(taskService.getTasks(userId, searchKey));
 		} catch (UserNotFoundException e) {
@@ -67,9 +71,10 @@ public class TaskController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
 		}
 	}
-	
+
 	@GetMapping("/filter")
-	public ResponseEntity<?> filterTasks(@RequestHeader("userId") Integer userId, @RequestParam(name = "categoryKey") String categoryKey) throws TasksNotFoundException {
+	public ResponseEntity<?> filterTasks(@RequestHeader("userId") Integer userId,
+			@RequestParam(name = "categoryKey") String categoryKey) throws TasksNotFoundException {
 		try {
 			return ResponseEntity.ok(taskService.getFilteredTasks(userId, categoryKey));
 		} catch (TasksNotFoundException e) {
@@ -78,9 +83,10 @@ public class TaskController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with Id " + userId);
 		}
 	}
-	
+
 	@GetMapping("/notify")
-	public ResponseEntity<?> notifyTasks(@RequestHeader("userId") Integer userId) throws TasksNotFoundException, UserNotFoundException {
+	public ResponseEntity<?> notifyTasks(@RequestHeader("userId") Integer userId)
+			throws TasksNotFoundException, UserNotFoundException {
 		try {
 			return ResponseEntity.ok(taskService.getNotifiedTasks(userId));
 		} catch (UserNotFoundException e) {
@@ -89,11 +95,18 @@ public class TaskController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
 		}
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteTask(@PathVariable("id") Integer taskId, @RequestHeader("userId") Integer userId) throws ResourceNotFoundException {
-		taskService.deleteTask(taskId, userId);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<?> deleteTask(@PathVariable("id") Integer taskId, @RequestHeader("userId") Integer userId)
+			throws ResourceNotFoundException {
+		try {
+			taskService.deleteTask(taskId, userId);
+			return ResponseEntity.ok().build();
+		} catch (UserNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with Id " + userId);
+		} catch (TasksNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
+		}
 	}
 
 }

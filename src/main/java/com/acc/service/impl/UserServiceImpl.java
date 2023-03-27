@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.acc.dao.UserRepository;
 import com.acc.domain.User;
 import com.acc.exception.EmailAlreadyExistsException;
+import com.acc.exception.EmailNotFoundException;
 import com.acc.exception.UserNotFoundException;
 import com.acc.model.UserDTO;
 import com.acc.model.UserUpdateRequest;
@@ -51,6 +52,16 @@ public class UserServiceImpl implements UserService {
 			userRepository.save(user);
 		} else {
 			throw new UserNotFoundException();
+		}
+	}
+
+	@Override
+	public boolean validateCredentials(UserDTO userDTO) throws EmailNotFoundException {
+		User existingUser = userRepository.findByEmail(userDTO.getEmail());
+		if(existingUser != null) {
+			return existingUser.getPassword().equals(userDTO.getPassword());
+		} else {
+			throw new EmailNotFoundException("Email not found Exception : " + userDTO.getEmail());
 		}
 	}
 }

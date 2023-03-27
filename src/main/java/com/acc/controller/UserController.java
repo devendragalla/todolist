@@ -3,6 +3,7 @@ package com.acc.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acc.exception.EmailAlreadyExistsException;
+import com.acc.exception.EmailNotFoundException;
 import com.acc.exception.UserNotFoundException;
 import com.acc.model.ErrorResponse;
 import com.acc.model.UserDTO;
@@ -19,6 +21,7 @@ import com.acc.service.UserService;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class UserController {
 
 	@Autowired
@@ -45,4 +48,18 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Email already exists"));
 		}
 	}
+	
+	 @PostMapping("/login")
+	    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) throws EmailNotFoundException {
+	        try {
+				boolean isValid = userService.validateCredentials(userDTO);
+				if (isValid) {
+				    return ResponseEntity.ok("Login successful!");
+				} else {
+				    return ResponseEntity.badRequest().body("Invalid email or password.");
+				}
+			} catch (EmailNotFoundException e) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
+			}
+	    }
 }
