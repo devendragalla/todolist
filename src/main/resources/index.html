@@ -7,8 +7,8 @@
   <body>
     <h1>Web Crawling Example</h1>
     <button id="button1">Sort By Priority</button>
-    <button id="button2">Get List 2</button>
-    <button id="button3">Get List 3</button>
+    <button id="button2">Filter</button>
+    <button id="button3">Notify Tasks</button>
     <br><br>
     <textarea id="list" rows="10" cols="50"></textarea>
 
@@ -33,8 +33,24 @@
 				list.value = JSON.stringify(response.data, null, 2);
 			});
       };
+      const getList2 = async () => {
+          const response = axios.get('http://localhost:8080/tasks?sortBy=Priority', {
+				headers: headers
+			}).then(response => {
+				list.value = JSON.stringify(response.data, null, 2);
+			});
+      };
+      const getList3 = async () => {
+          const response = axios.get('http://localhost:8080/tasks/notify', {
+				headers: headers
+			}).then(response => {
+				list.value = JSON.stringify(response.data, null, 2);
+			});
+      };
 
       button1.addEventListener('click', getList1);
+      button2.addEventListener('click', getList2);
+      button3.addEventListener('click', getList3);
     </script>
   </body>
 </html>
