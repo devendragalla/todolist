@@ -1,7 +1,9 @@
 package com.acc.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,10 @@ import com.acc.dao.TaskRepository;
 import com.acc.dao.UserRepository;
 import com.acc.domain.Status;
 import com.acc.domain.Task;
+import com.acc.domain.User;
 import com.acc.exception.ResourceNotFoundException;
+import com.acc.exception.TasksNotFoundException;
+import com.acc.exception.UserNotFoundException;
 import com.acc.model.TaskDTO;
 import com.acc.service.SortingService;
 import com.acc.service.TaskService;
@@ -37,6 +42,12 @@ public class TaskServiceImpl  implements TaskService{
     
     @Autowired
     private SearchingServiceImpl searchingService;
+    
+    @Autowired
+    private CategoryFilterService categoryService;
+    
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public Task save(TaskDTO taskDTO) {
@@ -93,15 +104,74 @@ public class TaskServiceImpl  implements TaskService{
     }
 
 	@Override
-	public List<Task> getAllTasks(String sortBy) {
-		List<Task> tasks = taskRepository.findAll();
-		List<Task> sortedTasks =sortingService.sort(tasks, sortBy);
+	public List<Task> getAllTasks(Integer userId, String sortBy) throws UserNotFoundException, TasksNotFoundException  {
+		List<Task> sortedTasks = new ArrayList<>();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			List<Task> tasks = taskRepository.findByUser(user.get());
+			if (tasks != null && !tasks.isEmpty()) {
+				sortedTasks =sortingService.sort(tasks, sortBy);
+			} else {
+				throw new TasksNotFoundException(" There are no avaliable tasks.");
+			}
+		} else {
+			throw new UserNotFoundException();
+		}
+		
 		return sortedTasks;
 	}
 
 	@Override
-	public List<Task> getTasks(String searchKey) {
-		List<Task> tasks = taskRepository.findAll();
-		return searchingService.search(tasks, searchKey);
+	public List<Task> getTasks(Integer userId, String searchKey) throws TasksNotFoundException, UserNotFoundException {
+		List<Task> searchedTasks = new ArrayList<>();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			List<Task> tasks = taskRepository.findByUser(user.get());
+			if (tasks != null && !tasks.isEmpty()) {
+				searchedTasks = searchingService.search(tasks, searchKey);
+			} else {
+				throw new TasksNotFoundException(" There are no avaliable tasks.");
+			}
+		} else {
+			throw new UserNotFoundException();
+		}
+
+		return searchedTasks;
+	}
+	
+	@Override 
+	public List<Task> getFilteredTasks(Integer userId, String CategoryKey) throws TasksNotFoundException, UserNotFoundException{
+		List<Task> filteredTasks = new ArrayList<>();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			List<Task> tasks = taskRepository.findByUser(user.get());
+			if (tasks != null && !tasks.isEmpty()) {
+				filteredTasks = categoryService.filterByCategory(tasks, CategoryKey);
+			} else {
+				throw new TasksNotFoundException(" There are no avaliable tasks.");
+			}
+		} else {
+			throw new UserNotFoundException();
+		}
+
+		return filteredTasks;
+	}
+
+	@Override
+	public List<Task> getNotifiedTasks(Integer userId) throws UserNotFoundException, TasksNotFoundException {
+		List<Task> notifiedTasks = new ArrayList<>();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			List<Task> tasks = taskRepository.findByUser(user.get());
+			if (tasks != null && !tasks.isEmpty()) {
+				notifiedTasks = notificationService.getTasksDueToday(tasks);
+			} else {
+				throw new TasksNotFoundException(" There are no avaliable tasks for today");
+			}
+		} else {
+			throw new UserNotFoundException();
+		}
+
+		return notifiedTasks;
 	}
 }

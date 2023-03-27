@@ -7,9 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import org.springframework.stereotype.Service;
+
 import com.acc.domain.Task;
 
-public class Notification {
+@Service
+public class NotificationService {
     
     public List<Task> getTasksDueToday(List<Task> tasks) {
         List<Task> dueTodayTasks = new ArrayList<>();

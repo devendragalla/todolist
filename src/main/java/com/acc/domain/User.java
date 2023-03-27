@@ -31,7 +31,7 @@ public class User {
     @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
+    
 	public Integer getId() {
 		return id;
 	}
