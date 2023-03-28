@@ -24,6 +24,6 @@ public interface TaskService {
 
 	public void deleteTask(Integer taskId, Integer userId) throws UserNotFoundException, TasksNotFoundException;
 	
-	public List<Task> getInProgressTasks(Integer userId);
+	public List<Task> getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException;
 }
 

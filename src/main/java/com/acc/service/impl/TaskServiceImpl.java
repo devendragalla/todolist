@@ -48,6 +48,9 @@ public class TaskServiceImpl  implements TaskService{
     
     @Autowired
     private NotificationService notificationService;
+    
+    @Autowired
+    private ProgressService progressService;
 
     @Override
     public Task save(TaskDTO taskDTO) {
@@ -188,5 +191,22 @@ public class TaskServiceImpl  implements TaskService{
 		} else {
 			throw new UserNotFoundException();
 		}
+	}
+
+	@Override
+	public List<Task> getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException {
+		List<Task> inProgressTasks = new ArrayList<>();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			List<Task> tasks = taskRepository.findByUser(user.get());
+			if(tasks != null && !tasks.isEmpty()) {
+				inProgressTasks = progressService.getPendingTasksAfterDueDate(tasks);
+			} else {
+				throw new TasksNotFoundException(" There are no avaliable tasks");
+			}
+		} else {
+			throw new UserNotFoundException();
+		}
+		return inProgressTasks;
 	}
 }
