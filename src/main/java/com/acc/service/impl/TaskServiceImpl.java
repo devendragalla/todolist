@@ -189,4 +189,10 @@ public class TaskServiceImpl  implements TaskService{
 			throw new UserNotFoundException();
 		}
 	}
+
+	@Override
+	public List<Task> getInProgressTasks(Integer userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
