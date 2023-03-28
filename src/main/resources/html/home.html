@@ -124,45 +124,45 @@
 		<button id="button1">Sort By Priority</button>
 		<button id="button2">Notify Tasks</button>
 		<br><br>
-		<textarea id="list" rows="10" cols="50"></textarea>
-		
+		<textarea id="list" rows="2000" cols="500"></textarea>
+
 	</div>
 </body>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
-	 // Retrieve user data from localStorage
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    document.getElementById("username").innerText = userData.email;
-    
-    const button1 = document.querySelector('#button1');
-      const button3 = document.querySelector('#button2');
-      const list = document.querySelector('#list');
-      
-      const userId = 1;
-      
-      const headers = {
-			'userId': userId
-		};
+	// Retrieve user data from localStorage
+	const userData = JSON.parse(localStorage.getItem('userData'));
+	document.getElementById("username").innerText = userData.email;
+
+	const button1 = document.querySelector('#button1');
+	const button2 = document.querySelector('#button2');
+	const list = document.querySelector('#list');
+
+	const userId = 1;
+
+	const headers = {
+		'userId': userId
+	};
 
 
-      const getList1 = async () => {
-          const response = axios.get('http://localhost:8080/tasks?sortBy=priority', {
-				headers: headers
-			}).then(response => {
-				list.value = JSON.stringify(response.data, null, 2);
-			});
-      };
-      
-      const getList2 = async () => {
-          const response = axios.get('http://localhost:8080/tasks/notify', {
-				headers: headers
-			}).then(response => {
-				list.value = JSON.stringify(response.data, null, 2);
-			});
-      };
+	const getList1 = async () => {
+		const response = axios.get('http://localhost:8080/tasks?sortBy=priority', {
+			headers: headers
+		}).then(response => {
+			list.value = JSON.stringify(response.data, null, 2);
+		});
+	};
 
-      button1.addEventListener('click', getList1);
-      button2.addEventListener('click', getList2);
+	const getList2 = async () => {
+		const response = axios.get('http://localhost:8080/tasks/notify', {
+			headers: headers
+		}).then(response => {
+			list.value = JSON.stringify(response.data, null, 2);
+		});
+	};
+
+	button1.addEventListener('click', getList1);
+	button2.addEventListener('click', getList2);
 </script>
 
 </html>

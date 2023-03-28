@@ -95,6 +95,18 @@ public class TaskController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
 		}
 	}
+	
+	@GetMapping("/inProgress")
+	public ResponseEntity<?> getInProgressTasks(@RequestHeader("userId") Integer userId)
+			throws TasksNotFoundException, UserNotFoundException {
+		try {
+			return ResponseEntity.ok(taskService.getInProgressTasks(userId));
+		} catch (UserNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with Id " + userId);
+		} catch (TasksNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
+		}
+	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteTask(@PathVariable("id") Integer taskId, @RequestHeader("userId") Integer userId)

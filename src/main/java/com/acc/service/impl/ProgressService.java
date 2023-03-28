@@ -11,7 +11,7 @@ import com.acc.domain.Task;
 @Service
 public class ProgressService {
 
-	private static final String IN_PROGRESS = "InProgress";
+	private static final String IN_PROGRESS = "INPROGRESS";
 
 	public List<Task> getPendingTasksAfterDueDate(List<Task> tasks) {
 		
