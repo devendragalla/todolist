@@ -9,6 +9,7 @@ import com.acc.dao.UserRepository;
 import com.acc.domain.User;
 import com.acc.exception.EmailAlreadyExistsException;
 import com.acc.exception.EmailNotFoundException;
+import com.acc.exception.TodolistException;
 import com.acc.exception.UserNotFoundException;
 import com.acc.model.UserDTO;
 import com.acc.model.UserUpdateRequest;
@@ -56,10 +57,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean validateCredentials(UserDTO userDTO) throws EmailNotFoundException {
+	public User validateCredentials(UserDTO userDTO) throws EmailNotFoundException, TodolistException {
 		User existingUser = userRepository.findByEmail(userDTO.getEmail());
 		if(existingUser != null) {
-			return existingUser.getPassword().equals(userDTO.getPassword());
+			if(existingUser.getPassword().equals(userDTO.getPassword())) {
+				return existingUser;
+			} else {
+				throw new TodolistException("Invalid email and password");
+			}
 		} else {
 			throw new EmailNotFoundException("Email not found Exception : " + userDTO.getEmail());
 		}

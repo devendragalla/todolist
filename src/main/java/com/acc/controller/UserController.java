@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acc.domain.User;
 import com.acc.exception.EmailAlreadyExistsException;
 import com.acc.exception.EmailNotFoundException;
+import com.acc.exception.TodolistException;
 import com.acc.exception.UserNotFoundException;
 import com.acc.model.ErrorResponse;
 import com.acc.model.UserDTO;
@@ -31,7 +33,7 @@ public class UserController {
 	public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 		try {
 			userService.createUser(userDTO);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(userDTO);
 		} catch (EmailAlreadyExistsException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Email already exists"));
 		}
@@ -50,15 +52,13 @@ public class UserController {
 	}
 	
 	 @PostMapping("/login")
-	    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) throws EmailNotFoundException {
+	    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) throws EmailNotFoundException, TodolistException {
 	        try {
-				boolean isValid = userService.validateCredentials(userDTO);
-				if (isValid) {
-				    return ResponseEntity.ok("Login successful!");
-				} else {
-				    return ResponseEntity.badRequest().body("Invalid email or password.");
-				}
+				User user = userService.validateCredentials(userDTO);
+				    return ResponseEntity.ok(user);
 			} catch (EmailNotFoundException e) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
+			} catch (TodolistException e) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getErrorMessage()));
 			}
 	    }

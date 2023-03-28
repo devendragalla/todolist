@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Login Page</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+	<style>
+		.login-box {
+			width: 400px;
+			margin: auto;
+			margin-top: 50px;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+
+		.form-group {
+			margin-bottom: 20px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		.form-control {
+			display: block;
+			width: 100%;
+			padding: 8px;
+			font-size: 16px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+
+		.btn {
+			display: block;
+			width: 100%;
+			padding: 8px;
+			font-size: 16px;
+			border: none;
+			border-radius: 5px;
+			background-color: #007bff;
+			color: #fff;
+		}
+
+		#error-message {
+			margin-top: 20px;
+			padding: 10px;
+			background-color: #ffcccc;
+			color: #cc0000;
+			border-radius: 5px;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+	<h1>Login Page</h1>
+	<form id="login-form">
+		<div class="login-box">
+			<h2>Login</h2>
+			<div class="form-group">
+				<label for="username">Username:</label>
+				<input type="text" class="form-control" id="username" placeholder="Enter username">
+			</div>
+			<div class="form-group">
+				<label for="password">Password:</label>
+				<input type="password" class="form-control" id="password" placeholder="Enter password">
+			</div>
+			<button type="submit" class="btn btn-primary" id="login-btn">Login</button>
+			<div id="error-message" style="display: none;"></div>
+		</div>
+
+	</form>
+
+	<script>
+		// Listen to the form submission event
+		$("#login-form").submit(function (event) {
+			event.preventDefault();
+
+			// Collect form data
+			const email = $("#username").val();
+			const password = $("#password").val();
+
+			const formData = {
+				email: email,
+				password: password
+			};
+
+			// Convert the JavaScript object to a JSON string
+			const jsonData = JSON.stringify(formData);
+
+			// Send data to API endpoint
+			$.ajax({
+				url: "http://localhost:8080/users/login",
+				type: "POST",
+				contentType: "application/json",
+				data: jsonData,
+				success: function (response) {
+					// Redirect to home page on successful login
+					console.log(response);
+					if (response != null && response.email != null) {
+						console.log('login success');
+						localStorage.setItem('userData', JSON.stringify(response));
+						window.location.href = "home.html?user=${response}";
+					} else {
+						// Display error message
+						console.log('else');
+						$("#error-message").text(response.message);
+						$("#error-message").show();
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					// Handle login error here
+					console.log(jqXHR.responseText);
+					console.log(jqXHR);
+					$("#error-message").text(jqXHR.responseJSON.errorMessage);
+					$("#error-message").show();
+				}
+			});
+		});
+	</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Todo List Home Page</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f7f7f7;
+			margin: 0;
+			padding: 0;
+		}
+
+		.header {
+			background-color: #fff;
+			padding: 20px;
+			box-shadow: 0 0 5px #ccc;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.user-info img {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			margin-right: 10px;
+		}
+
+		.user-info p {
+			margin: 0;
+			font-weight: bold;
+		}
+
+		.todo-container {
+			background-color: #fff;
+			padding: 20px;
+			margin: 20px;
+			box-shadow: 0 0 5px #ccc;
+		}
+
+		.todo-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.todo-header h2 {
+			margin: 0;
+			font-size: 24px;
+			font-weight: bold;
+		}
+
+		.todo-header button {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			font-size: 16px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.todo-header button:hover {
+			background-color: #3e8e41;
+		}
+
+		.todo-list {
+			margin-top: 20px;
+		}
+
+		.todo-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 10px 20px;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.todo-item:last-child {
+			border-bottom: none;
+		}
+
+		.todo-item p {
+			margin: 0;
+			font-size: 16px;
+			font-weight: bold;
+		}
+
+		.todo-item button {
+			background-color: #f44336;
+			color: #fff;
+			border: none;
+			padding: 5px 10px;
+			border-radius: 5px;
+			font-size: 14px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.todo-item button:hover {
+			background-color: #c62828;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="header">
+			<h1>My Todo List</h1>
+			<div class="user-details">
+				<p>Welcome, <span id="username"></span>!</p>
+				<button class="logout-btn">Logout</button>
+			</div>
+		</div>
+
+		<div class="todo-list">
+			<h2>Todo</h2>
+			<ul>
+				<li>
+					<input type="checkbox" id="todo1" name="todo1" value="todo1">
+					<label for="todo1">Task 1</label>
+				</li>
+				<li>
+					<input type="checkbox" id="todo2" name="todo2" value="todo2">
+					<label for="todo2">Task 2</label>
+				</li>
+			</ul>
+
+			<button class="add-btn">Add task</button>
+		</div>
+
+		<div class="completed-list">
+			<h2>Completed</h2>
+			<ul>
+				<li>
+					<input type="checkbox" id="completed1" name="completed1" value="completed1" checked>
+					<label for="completed1">Completed Task 1</label>
+				</li>
+				<li>
+					<input type="checkbox" id="completed2" name="completed2" value="completed2" checked>
+					<label for="completed2">Completed Task 2</label>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+
+<script>
+	 // Retrieve user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    document.getElementById("username").innerText = userData.email;
+</script>
+
+</html>

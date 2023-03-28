@@ -16,11 +16,11 @@ public class SortingServiceImpl implements SortingService {
 
 	@Override
 	public List<Task> sort(List<Task> tasks, String sortBy) {
-		if (sortBy.equals("Priority")) {
+		if (sortBy.equals("priority")) {
 			taskSorter.sortByPriority(tasks);
-		} else if (sortBy.equals("lastdate")) {
+		} else if (sortBy.equals("lastUpdatedDate")) {
 			taskSorter.sortbyUpdatedTime(tasks);
-		} else if (sortBy.equals("lastdate")) {
+		} else if (sortBy.equals("dueDate")) {
 			taskSorter.sortByDueDate(tasks);
 		}
 		return tasks;

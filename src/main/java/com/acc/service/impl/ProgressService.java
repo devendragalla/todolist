@@ -1,29 +1,30 @@
 package com.acc.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.acc.domain.Task;
 
+@Service
 public class ProgressService {
-	private LinkedList<Task> taskList;
 
-	public ProgressService() {
-		this.taskList = new LinkedList<>();
-	}
+	private static final String IN_PROGRESS = "InProgress";
 
-	public void addTask(Task task) {
-		taskList.add(task);
-	}
-
-	public int getPendingTasksAfterDueDate(int userId, LocalDateTime currentDate, String status) {
-		int count = 0;
-		for (Task task : taskList) {
-			if (task.getStatus().equals(status) && task.getDueDate().isBefore(currentDate)) {
-				if (task.getStatus().equals("Pending")) {
-					count++;
-				}
+	public List<Task> getPendingTasksAfterDueDate(List<Task> tasks) {
+		
+		List<Task> inProgressTasks = new ArrayList<>();
+		
+		LocalDateTime currentDate = LocalDateTime.now();
+		
+		for (Task task : tasks) {
+			if (task.getStatus().equals(IN_PROGRESS) && task.getDueDate().isBefore(currentDate)) {
+				inProgressTasks.add(task);
 			}
 		}
-		return count;
+		
+		return inProgressTasks;
 	}
 }
