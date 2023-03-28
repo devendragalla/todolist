@@ -20,7 +20,8 @@ public class ProgressService {
 		LocalDateTime currentDate = LocalDateTime.now();
 		
 		for (Task task : tasks) {
-			if (task.getStatus().equals(IN_PROGRESS) && task.getDueDate().isBefore(currentDate)) {
+			if (task.getStatus() != null && task.getStatus().getAction().equals(IN_PROGRESS)
+					&& task.getDueDate().isBefore(currentDate)) {
 				inProgressTasks.add(task);
 			}
 		}
