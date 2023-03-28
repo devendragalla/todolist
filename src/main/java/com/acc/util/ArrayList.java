@@ -2,65 +2,53 @@ package com.acc.util;
 
 import java.util.Arrays;
 
-public class ArrayList<E> {
+import com.acc.domain.Task;
 
-    private int size = 0;
-    private static final int DEFAULT_CAPACITY = 10;
-    private Object elements[];
+public class ArrayList<T> {
+
+    private int size;
+    private Object[] elements;
 
     public ArrayList() {
-        elements = new Object[DEFAULT_CAPACITY];
+        this.size = 0;
+        this.elements = new Object[10];
     }
 
-    public void add(E e) {
-        if (size == elements.length) {
-            ensureCapacity();
+    public void add(T element) {
+        if (this.size == this.elements.length) {
+            this.elements = Arrays.copyOf(this.elements, this.elements.length * 2);
         }
-        elements[size++] = e;
+        this.elements[this.size] = element;
+        this.size++;
     }
 
-    @SuppressWarnings("unchecked")
-    public E get(int i) {
-        if (i >= size || i < 0) {
-            throw new IndexOutOfBoundsException("Index: " + i + ", Size " + i);
+    public T get(int index) {
+        if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException();
         }
-        return (E) elements[i];
-    }
-
-    public E remove(int i) {
-        if (i >= size || i < 0) {
-            throw new IndexOutOfBoundsException("Index: " + i + ", Size " + i);
-        }
-        Object item = elements[i];
-        int numElements = elements.length - (i + 1);
-        System.arraycopy(elements, i + 1, elements, i, numElements);
-        size--;
-        return (E) item;
+        return (T) this.elements[index];
     }
 
     public int size() {
-        return size;
-    }
-
-    private void ensureCapacity() {
-        int newSize = elements.length * 2;
-        elements = Arrays.copyOf(elements, newSize);
+        return this.size;
     }
     
-    public E[] toArray() {
-        return Arrays.copyOf(elements, size, (Class<? extends E[]>) elements.getClass());
-    }
-
-    public String toString() {
+    public static String getListAsString(ArrayList<Task> inProgressTasks) {
         StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < size; i++) {
-            sb.append(elements[i].toString());
-            if (i < size - 1) {
-                sb.append(",");
-            }
+        for (int i = 0; i < inProgressTasks.size(); i++) {
+            sb.append("Task ").append(i).append(": ").append(" \n  { \n").append(getString(inProgressTasks.get(i))).append("\n");
         }
-        sb.append(']');
+        return sb.toString();
+    }
+    
+    
+    public static String getString(Task task) {
+        StringBuilder sb = new StringBuilder();
+            sb.append("    Title: ").append(task.getTitle()).append("\n");
+            sb.append("    Due Date: ").append(task.getDueDate()).append("\n");
+            sb.append("    Priority: ").append(task.getPriority().getPriorityName()).append("\n");
+            sb.append("    Status: ").append(task.getStatus().getAction()).append("\n");
+            sb.append("  } ").append("\n");
         return sb.toString();
     }
 }

@@ -189,7 +189,7 @@ public class TaskServiceImpl  implements TaskService{
 	}
 
 	@Override
-	public Task[] getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException {
+	public Object getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException {
 		com.acc.util.ArrayList<Task> inProgressTasks = new com.acc.util.ArrayList<>();
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {
@@ -202,7 +202,6 @@ public class TaskServiceImpl  implements TaskService{
 		} else {
 			throw new UserNotFoundException();
 		}
-		return inProgressTasks.toArray();
-
+		return inProgressTasks.getListAsString(inProgressTasks);
 	}
 }

@@ -7,7 +7,6 @@ import com.acc.exception.ResourceNotFoundException;
 import com.acc.exception.TasksNotFoundException;
 import com.acc.exception.UserNotFoundException;
 import com.acc.model.TaskDTO;
-import com.acc.util.ArrayList;
 
 public interface TaskService {
 
@@ -25,6 +24,6 @@ public interface TaskService {
 
 	public void deleteTask(Integer taskId, Integer userId) throws UserNotFoundException, TasksNotFoundException;
 	
-	public Task[] getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException;
+	public Object getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException;
 }
 
