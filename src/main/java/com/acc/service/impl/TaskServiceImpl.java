@@ -60,13 +60,8 @@ public class TaskServiceImpl  implements TaskService{
         task.setDescription(taskDTO.getDescription());
         task.setPriority(priorityRepository.findById(taskDTO.getPriorityId()).orElse(priorityRepository.findById(0).get()));
         task.setDueDate(LocalDateTime.parse(taskDTO.getDueDate()));
-        task.setCategoryType(taskDTO.getCategoryType());
-        Status status = statusRepository.findByAction(taskDTO.getStatus());
-        if(status != null) {
-        	 task.setStatus(status);
-        } else {
-        	task.setStatus(statusRepository.findByAction("TODO"));
-        }
+		task.setCategoryType(taskDTO.getCategoryType());
+		task.setStatus(statusRepository.findByAction("TODO"));
         task.setCreatedDate(LocalDateTime.now());
         task.setUpdatedDate(LocalDateTime.now());
         task.setStatusUpdatedDate(LocalDateTime.now());
