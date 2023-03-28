@@ -9,22 +9,37 @@ public class WebCrawlingTest {
 	
 	public static void main(String[] args) throws InterruptedException {
 		System.setProperty("webdriver.edge.driver",
-				"/Users/devendra/Downloads/edgedriver_mac64/msedgedriver");
+				"C:\\Users\\HP\\OneDrive\\Documents\\GitHub\\todolist\\src\\main\\resources\\msedgedriver.exe");
 		WebDriver driver = new EdgeDriver();
-		driver.get("file:////Volumes/Deva/Windsor/WINTER_2023/ACC_COMP8547/Project/todolist/src/main/resources/index.html");
-		WebElement button = driver.findElement(By.xpath("/html/body/button[1]"));
-		Thread.sleep(10000);
+		driver.get("file:///C:/Users/HP/OneDrive/Documents/GitHub/todolist/src/main/resources/html/index.html");
+		driver.findElement(By.xpath("/html/body/form/div/div[1]/input")).sendKeys("abcd@gmail.com");
+		Thread.sleep(1000);
+		
+		driver.findElement(By.xpath("/html/body/form/div/div[2]/input")).sendKeys("pwd");
+		Thread.sleep(1000);
 
 		// Click the button
-		button.click();
+		//button.click();
 
-		WebElement button1 = driver.findElement(By.xpath("/html/body/button[3]"));
+		WebElement button1 = driver.findElement(By.xpath("/html/body/form/div/button"));
 		button1.click();
 
-		Thread.sleep(10000);
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("/html/body/form/div/div[1]/input")).clear();
+		driver.findElement(By.xpath("/html/body/form/div/div[1]/input")).sendKeys("jane.doe@example.com");
+		Thread.sleep(1000);
+		
+		driver.findElement(By.xpath("/html/body/form/div/div[2]/input")).clear();
+		driver.findElement(By.xpath("/html/body/form/div/div[2]/input")).sendKeys("newpassword");
+		Thread.sleep(1000);
 
 		// Click the button
-		button.click();
+		//button.click();
+
+		button1.click();
+
+		// Click the button
+		//button.click();
 		Thread.sleep(10000);
 		System.out.println(driver.getTitle());
 		driver.quit();
