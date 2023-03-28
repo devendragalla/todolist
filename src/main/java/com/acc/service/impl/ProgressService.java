@@ -1,7 +1,7 @@
 package com.acc.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import com.acc.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,9 +13,9 @@ public class ProgressService {
 
 	private static final String IN_PROGRESS = "INPROGRESS";
 
-	public List<Task> getPendingTasksAfterDueDate(List<Task> tasks) {
+	public ArrayList<Task> getPendingTasksAfterDueDate(List<Task> tasks) {
 		
-		List<Task> inProgressTasks = new ArrayList<>();
+		ArrayList<Task> inProgressTasks = new ArrayList<>();
 		
 		LocalDateTime currentDate = LocalDateTime.now();
 		

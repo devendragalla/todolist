@@ -22,7 +22,7 @@ public class NotificationService {
         while (!queue.isEmpty()) {
             Task task = queue.poll();
             LocalDateTime dueDate = task.getDueDate();
-            if (dueDate != null && dueDate.toLocalDate().equals(today)) {
+            if (dueDate != null && !task.getStatus().getAction().equals("COMPLETED")  && dueDate.toLocalDate().equals(today)) {
                 dueTodayTasks.add(task);
             }
         }

@@ -194,8 +194,8 @@ public class TaskServiceImpl  implements TaskService{
 	}
 
 	@Override
-	public List<Task> getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException {
-		List<Task> inProgressTasks = new ArrayList<>();
+	public Task[] getInProgressTasks(Integer userId) throws TasksNotFoundException, UserNotFoundException {
+		com.acc.util.ArrayList<Task> inProgressTasks = new com.acc.util.ArrayList<>();
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {
 			List<Task> tasks = taskRepository.findByUser(user.get());
@@ -207,7 +207,7 @@ public class TaskServiceImpl  implements TaskService{
 		} else {
 			throw new UserNotFoundException();
 		}
-		return inProgressTasks;
+		return inProgressTasks.toArray();
 
 	}
 }
